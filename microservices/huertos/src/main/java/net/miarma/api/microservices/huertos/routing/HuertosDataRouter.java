@@ -33,44 +33,44 @@ public class HuertosDataRouter {
 		
 		router.get(HuertosEndpoints.ANNOUNCES).handler(authGuard.check()).handler(hAnnounceData::getAll);
 		router.get(HuertosEndpoints.ANNOUNCE).handler(authGuard.check()).handler(hAnnounceData::getById);
-		router.post(HuertosEndpoints.ANNOUNCES).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hAnnounceData::create);
-		router.put(HuertosEndpoints.ANNOUNCE).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hAnnounceData::update);
-		router.delete(HuertosEndpoints.ANNOUNCE).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hAnnounceData::delete);
+		router.post(HuertosEndpoints.ANNOUNCES).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hAnnounceData::create);
+		router.put(HuertosEndpoints.ANNOUNCE).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hAnnounceData::update);
+		router.delete(HuertosEndpoints.ANNOUNCE).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hAnnounceData::delete);
 		
-		router.get(HuertosEndpoints.BALANCE).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hBalanceData::getBalance);
-		router.post(HuertosEndpoints.BALANCE).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hBalanceData::update);
-		router.delete(HuertosEndpoints.BALANCE).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hBalanceData::create);
+		router.get(HuertosEndpoints.BALANCE).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hBalanceData::getBalance);
+		router.post(HuertosEndpoints.BALANCE).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hBalanceData::update);
+		router.delete(HuertosEndpoints.BALANCE).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hBalanceData::create);
 		
-		router.get(HuertosEndpoints.EXPENSES).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hExpenseData::getAll);
-		router.get(HuertosEndpoints.EXPENSE).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hExpenseData::getById);
-		router.post(HuertosEndpoints.EXPENSES).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hExpenseData::create);
-		router.put(HuertosEndpoints.EXPENSE).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hExpenseData::update);
-		router.delete(HuertosEndpoints.EXPENSE).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hExpenseData::delete);
+		router.get(HuertosEndpoints.EXPENSES).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hExpenseData::getAll);
+		router.get(HuertosEndpoints.EXPENSE).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hExpenseData::getById);
+		router.post(HuertosEndpoints.EXPENSES).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hExpenseData::create);
+		router.put(HuertosEndpoints.EXPENSE).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hExpenseData::update);
+		router.delete(HuertosEndpoints.EXPENSE).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hExpenseData::delete);
 		
-		router.get(HuertosEndpoints.INCOMES).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hIncomeData::getAll);
-		router.get(HuertosEndpoints.INCOME).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hIncomeData::getById);
-		router.post(HuertosEndpoints.INCOMES).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hIncomeData::create);
-		router.put(HuertosEndpoints.INCOME).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hIncomeData::update);
-		router.delete(HuertosEndpoints.INCOME).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hIncomeData::delete);
-		router.get(HuertosEndpoints.INCOMES_WITH_NAMES).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hIncomeData::getIncomesWithNames);
+		router.get(HuertosEndpoints.INCOMES).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hIncomeData::getAll);
+		router.get(HuertosEndpoints.INCOME).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hIncomeData::getById);
+		router.post(HuertosEndpoints.INCOMES).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hIncomeData::create);
+		router.put(HuertosEndpoints.INCOME).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hIncomeData::update);
+		router.delete(HuertosEndpoints.INCOME).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hIncomeData::delete);
+		router.get(HuertosEndpoints.INCOMES_WITH_NAMES).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hIncomeData::getIncomesWithNames);
 		
-		router.get(HuertosEndpoints.MEMBERS).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hMemberData::getAll);
-		router.get(HuertosEndpoints.MEMBER).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hMemberData::getById);
-		router.post(HuertosEndpoints.MEMBERS).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hMemberData::create);
-		router.put(HuertosEndpoints.MEMBER).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hMemberData::update);
-		router.delete(HuertosEndpoints.MEMBER).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hMemberData::delete);
+		router.get(HuertosEndpoints.MEMBERS).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberData::getAll);
+		router.get(HuertosEndpoints.MEMBER).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberData::getById);
+		router.post(HuertosEndpoints.MEMBERS).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberData::create);
+		router.put(HuertosEndpoints.MEMBER).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberData::update);
+		router.delete(HuertosEndpoints.MEMBER).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberData::delete);
 		
-		router.get(HuertosEndpoints.PRE_USERS).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hPreUserData::getAll);
-		router.get(HuertosEndpoints.PRE_USER).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hPreUserData::getById);
+		router.get(HuertosEndpoints.PRE_USERS).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hPreUserData::getAll);
+		router.get(HuertosEndpoints.PRE_USER).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hPreUserData::getById);
 		router.post(HuertosEndpoints.PRE_USERS).handler(hPreUserData::create);
-		router.put(HuertosEndpoints.PRE_USER).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hPreUserData::update);
-		router.delete(HuertosEndpoints.PRE_USER).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hPreUserData::delete);
+		router.put(HuertosEndpoints.PRE_USER).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hPreUserData::update);
+		router.delete(HuertosEndpoints.PRE_USER).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hPreUserData::delete);
 		
-		router.get(HuertosEndpoints.REQUESTS).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hRequestData::getAll);
-		router.get(HuertosEndpoints.REQUEST).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hRequestData::getById);
+		router.get(HuertosEndpoints.REQUESTS).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hRequestData::getAll);
+		router.get(HuertosEndpoints.REQUEST).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hRequestData::getById);
 		router.post(HuertosEndpoints.REQUESTS).handler(hRequestData::create);
-		router.put(HuertosEndpoints.REQUEST).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hRequestData::update);
-		router.delete(HuertosEndpoints.REQUEST).handler(authGuard.check(HuertosUserRole.ADMIN)).handler(hRequestData::delete);
+		router.put(HuertosEndpoints.REQUEST).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hRequestData::update);
+		router.delete(HuertosEndpoints.REQUEST).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hRequestData::delete);
 		
 	}
 }

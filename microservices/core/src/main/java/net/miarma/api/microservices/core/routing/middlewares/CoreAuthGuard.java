@@ -29,7 +29,10 @@ public class CoreAuthGuard extends AbstractAuthGuard<UserEntity, CoreUserRole> {
     }
 
     @Override
-    protected boolean hasPermission(UserEntity user, CoreUserRole role) {
-        return user.getGlobal_role() == CoreUserRole.ADMIN;
+    protected boolean hasPermission(UserEntity member, CoreUserRole userRole, CoreUserRole... allowedRoles) {
+        if (member == null) return false;
+        if (member.getGlobal_role() == CoreUserRole.ADMIN) return true;
+        return false;
     }
+
 }

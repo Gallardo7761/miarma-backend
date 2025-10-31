@@ -19,9 +19,9 @@ public abstract class AbstractAuthGuard<U, R extends Enum<R> & IUserRole> {
     
 	protected abstract R parseRole(String roleStr);
     protected abstract void getUserEntity(int userId, RoutingContext ctx, Consumer<U> callback);
-    protected abstract boolean hasPermission(U user, R role);
+    protected abstract boolean hasPermission(U user, R role, R... allowedRoles);
     
-	public Handler<RoutingContext> check(R... allowedRoles) {
+    public Handler<RoutingContext> check(R... allowedRoles) {
         return ctx -> {
             String token = extractToken(ctx);
             if (token == null || !JWTManager.getInstance().isValid(token)) {
@@ -30,18 +30,6 @@ public abstract class AbstractAuthGuard<U, R extends Enum<R> & IUserRole> {
             }
 
             int userId = JWTManager.getInstance().extractUserId(token);
-            String roleStr = JWTManager.getInstance().extractRole(token);
-
-            R role;
-            try {
-                role = parseRole(roleStr);
-            } catch (Exception e) {
-                JsonUtil.sendJson(ctx, ApiStatus.UNAUTHORIZED, "Invalid role");
-                return;
-            }
-
-            ctx.put("userId", userId);
-            ctx.put("role", role);
 
             getUserEntity(userId, ctx, entity -> {
                 if (entity == null) {
@@ -49,7 +37,9 @@ public abstract class AbstractAuthGuard<U, R extends Enum<R> & IUserRole> {
                     return;
                 }
 
-                if (allowedRoles.length == 0 || isRoleAllowed(role, allowedRoles)) {
+                R userRole = extractRoleFromEntity(entity);
+
+                if (allowedRoles.length == 0 || hasPermission(entity, userRole, allowedRoles)) {
                     ctx.put("userEntity", entity);
                     ctx.next();
                 } else {
@@ -58,12 +48,13 @@ public abstract class AbstractAuthGuard<U, R extends Enum<R> & IUserRole> {
             });
         };
     }
-
-    private boolean isRoleAllowed(R role, R... allowedRoles) {
-        for (R allowed : allowedRoles) {
-            if (role == allowed) return true;
+    
+    protected R extractRoleFromEntity(U user) {
+        try {
+            return (R) user.getClass().getMethod("getRole").invoke(user);
+        } catch (Exception e) {
+            return null;
         }
-        return false;
     }
 
     private String extractToken(RoutingContext ctx) {
