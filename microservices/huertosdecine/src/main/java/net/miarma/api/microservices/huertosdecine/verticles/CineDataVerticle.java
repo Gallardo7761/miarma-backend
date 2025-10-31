@@ -1,0 +1,119 @@
+package net.miarma.api.microservices.huertosdecine.verticles;
+
+import java.util.stream.Collectors;
+
+import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Promise;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.sqlclient.Pool;
+import net.miarma.api.backlib.ConfigManager;
+import net.miarma.api.backlib.Constants;
+import net.miarma.api.backlib.db.DatabaseProvider;
+import net.miarma.api.backlib.util.EventBusUtil;
+import net.miarma.api.backlib.util.RouterUtil;
+import net.miarma.api.microservices.huertosdecine.entities.VoteEntity;
+import net.miarma.api.microservices.huertosdecine.routing.CineDataRouter;
+import net.miarma.api.microservices.huertosdecine.services.ViewerService;
+import net.miarma.api.microservices.huertosdecine.services.VoteService;
+
+public class CineDataVerticle extends AbstractVerticle {
+    private ConfigManager configManager;
+    private VoteService voteService;
+    private ViewerService viewerService;
+
+    @Override
+    public void start(Promise<Void> startPromise) {
+        configManager = ConfigManager.getInstance();
+        Pool pool = DatabaseProvider.createPool(vertx, configManager);
+
+        voteService = new VoteService(pool);
+        viewerService = new ViewerService(pool);
+
+        Router router = Router.router(vertx);
+        RouterUtil.attachLogger(router);
+        CineDataRouter.mount(router, vertx, pool);
+        
+        registerLogicVerticleConsumer();
+
+        vertx.createHttpServer()
+            .requestHandler(router)
+            .listen(configManager.getIntProperty("cine.data.port"), res -> {
+                if (res.succeeded()) startPromise.complete();
+                else startPromise.fail(res.cause());
+            });
+    }
+
+    private void registerLogicVerticleConsumer() {
+        vertx.eventBus().consumer(Constants.CINE_EVENT_BUS, message -> {
+            JsonObject body = (JsonObject) message.body();
+            String action = body.getString("action");
+
+            switch (action) {
+                case "login" -> {
+                    String email = body.getString("email", null);
+                    String userName = body.getString("userName", null);
+                    String password = body.getString("password");
+                    boolean keepLoggedIn = body.getBoolean("keepLoggedIn", false);
+
+                    viewerService.login(email != null ? email : userName, password, keepLoggedIn)
+                        .onSuccess(message::reply)
+                        .onFailure(EventBusUtil.fail(message));
+                }
+
+                case "getVotesOnMovieByUserId" -> {
+                    Integer movieId = body.getInteger("movie_id");
+                    voteService.getVotesByMovieId(movieId)
+                            .onSuccess(votes -> {
+                                if (votes.isEmpty()) {
+                                    message.reply(new JsonObject().put("message", "No votes found for this movie and viewer"));
+                                } else {
+                                    String votesJson = votes.stream()
+                                            .map(Constants.GSON::toJson)
+                                            .collect(Collectors.joining(",", "[", "]"));
+                                    message.reply(new JsonArray(votesJson));
+                                }
+                            })
+                            .onFailure(EventBusUtil.fail(message));
+                }
+
+
+                case "getVotes" -> voteService.getVotesByMovieId(body.getInteger("movie_id"))
+                        .onSuccess(votes -> {
+                            String votesJson = votes.stream()
+                                    .map(Constants.GSON::toJson)
+                                    .collect(Collectors.joining(",", "[", "]"));
+                            message.reply(new JsonArray(votesJson));
+                        })
+                        .onFailure(EventBusUtil.fail(message));
+
+
+                case "addVote" -> {
+                    VoteEntity vote = Constants.GSON.fromJson(body.encode(), VoteEntity.class);
+                    voteService.create(vote)
+                        .onSuccess(createdVote -> message.reply(new JsonObject(Constants.GSON.toJson(createdVote))))
+                        .onFailure(EventBusUtil.fail(message));
+                }
+
+                case "deleteVote" -> {
+                    Integer userId = body.getInteger("user_id");
+                    voteService.delete(userId)
+                        .onSuccess(deletedVote -> message.reply(new JsonObject(Constants.GSON.toJson(deletedVote))))
+                        .onFailure(EventBusUtil.fail(message));
+                }
+
+                case "getVoteSelf" -> {
+                    String token = body.getString("token");
+                    voteService.getVoteSelf(token)
+                        .onSuccess(vote -> message.reply(new JsonObject(Constants.GSON.toJson(vote))))
+                        .onFailure(EventBusUtil.fail(message));
+                }
+
+                default -> EventBusUtil.fail(message).handle(new IllegalArgumentException("Unknown action: " + action));
+            }
+        });
+    }
+
+}

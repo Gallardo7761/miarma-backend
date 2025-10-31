@@ -1,0 +1,164 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.miarma.api</groupId>
+	<artifactId>backlib</artifactId>
+	<version>1.2.0</version>
+
+	<properties>
+		<maven.compiler.source>23</maven.compiler.source>
+		<maven.compiler.target>23</maven.compiler.target>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+		<repository>
+			<id>MiarmaGit</id>
+			<url>https://git.miarma.net/api/packages/Gallardo7761/maven</url>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>gitea</id>
+			<url>https://git.miarma.net/api/packages/Gallardo7761/maven</url>
+		</repository>
+		<snapshotRepository>
+			<id>gitea</id>
+			<url>https://git.miarma.net/api/packages/Gallardo7761/maven</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<dependencies>
+		<!-- Vert.X Core -->
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-core</artifactId>
+			<version>4.5.13</version>
+		</dependency>
+
+		<!-- Vert.X Web -->
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-web</artifactId>
+			<version>4.5.13</version>
+		</dependency>
+
+		<!-- Vert.X Web Client -->
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-web-client</artifactId>
+			<version>4.5.13</version>
+		</dependency>
+
+		<!-- Vert.X MariaDB/MySQL Client -->
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-mysql-client</artifactId>
+			<version>4.5.13</version>
+		</dependency>
+
+		<!-- Vert.X Mail Client -->
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-mail-client</artifactId>
+			<version>4.5.16</version>
+		</dependency>
+
+		<!-- Vert.X Redis Client -->
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-redis-client</artifactId>
+			<version>4.5.16</version>
+		</dependency>
+
+		<!-- Gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.12.1</version>
+		</dependency>
+
+		<!-- BCrypt -->
+		<dependency>
+			<groupId>org.mindrot</groupId>
+			<artifactId>jbcrypt</artifactId>
+			<version>0.4</version>
+		</dependency>
+
+		<!-- JWT -->
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>4.5.0</version>
+		</dependency>
+
+		<!-- SLF4J + Logback -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.12</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.5.13</version>
+		</dependency>
+
+		<!-- Jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.18.3</version>
+		</dependency>
+
+		<!-- Jakarta Mail -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>jakarta.mail</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+
+		<!-- Discord Webhook -->
+		<dependency>
+			<groupId>com.github.eduardomcb</groupId>
+			<artifactId>discord-webhook</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>BackLib</finalName>
+		<plugins>
+			<!-- Maven Shade Plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.5.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>net.miarma.backlib.MainVerticle</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

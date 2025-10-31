@@ -1,0 +1,83 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>net.miarma.api</groupId>
+	<artifactId>miarma-ecosystem</artifactId>
+	<version>1.2.0</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>backlib</module>
+		<module>bootstrap</module>
+		<module>microservices/huertos</module>
+		<module>microservices/huertosdecine</module>
+		<module>microservices/miarmacraft</module>
+		<module>microservices/mpaste</module>
+		<module>microservices/core</module>
+	</modules>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.miarma.api</groupId>
+			<artifactId>backlib</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.miarma.api</groupId>
+			<artifactId>core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.miarma.api</groupId>
+			<artifactId>huertos</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.miarma.api</groupId>
+			<artifactId>huertosdecine</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.miarma.api</groupId>
+			<artifactId>miarmacraft</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.miarma.api</groupId>
+			<artifactId>mpaste</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>ME-Core</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.5.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>
+										net.miarma.api.microservices.core.verticles.CoreMainVerticle</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
