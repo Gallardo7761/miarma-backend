@@ -1,14 +1,15 @@
 package net.miarma.api.backlib.security;
 
+import java.util.Date;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+
 import net.miarma.api.backlib.ConfigManager;
 import net.miarma.api.backlib.Constants;
-import net.miarma.api.backlib.Constants.CoreUserRole;
-
-import java.util.Date;
+import net.miarma.api.backlib.interfaces.IUserRole;
 
 /**
  * Clase de gestión de JSON Web Tokens (JWT).
@@ -49,7 +50,7 @@ public class JWTManager {
      * @param keepLoggedIn Indica si el token debe tener una duración prolongada.
      * @return El token JWT generado.
      */
-    public String generateToken(String user_name, Integer user_id, CoreUserRole role, boolean keepLoggedIn) {
+    public String generateToken(String user_name, Integer user_id, IUserRole role, boolean keepLoggedIn) {
     	final long EXPIRATION_TIME_MS = 1000L * (keepLoggedIn ? config.getIntProperty("jwt.expiration") : config.getIntProperty("jwt.expiration.short"));
     	return JWT.create()
     	        .withSubject(user_name)

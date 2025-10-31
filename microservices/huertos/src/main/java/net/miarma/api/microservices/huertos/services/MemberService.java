@@ -56,7 +56,6 @@ public class MemberService {
             	return Future.failedFuture(new ForbiddenException("User is not active"));
             }
 
-
             return userMetadataDAO.getById(user.getUser_id()).compose(metadata -> {
                 if (metadata.getStatus() != HuertosUserStatus.ACTIVE) {
 					return Future.failedFuture(new ForbiddenException("User is not active"));
