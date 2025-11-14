@@ -41,6 +41,7 @@ public class HuertosAuthGuard extends AbstractAuthGuard<MemberEntity, HuertosUse
             if (member.getRole() == role) return true;
         }
         return false;
+<<<<<<< HEAD
     }
 
     @Override
@@ -76,5 +77,8 @@ public class HuertosAuthGuard extends AbstractAuthGuard<MemberEntity, HuertosUse
                 }
             });
         };
+=======
+>>>>>>> refs/remotes/origin/dev
     }
+
 }

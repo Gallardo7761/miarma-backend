@@ -49,9 +49,17 @@ public abstract class AbstractAuthGuard<U, R extends Enum<R> & IUserRole> {
         };
     }
     
+<<<<<<< HEAD
     protected boolean isRoleAllowed(R role, R... allowedRoles) {
         for (R allowed : allowedRoles) {
             if (role == allowed) return true;
+=======
+    protected R extractRoleFromEntity(U user) {
+        try {
+            return (R) user.getClass().getMethod("getRole").invoke(user);
+        } catch (Exception e) {
+            return null;
+>>>>>>> refs/remotes/origin/dev
         }
     }
 
