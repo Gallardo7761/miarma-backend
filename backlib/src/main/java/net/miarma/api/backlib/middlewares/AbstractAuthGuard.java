@@ -14,14 +14,14 @@ import net.miarma.api.backlib.util.JsonUtil;
  * Maneja extracción de JWT y verificación básica.
  * Los microservicios solo implementan getUserEntity y hasPermission.
  */
-@SuppressWarnings("unchecked")  // arreglar el warning de heap pollution de los arrays de genéricos
+@SuppressWarnings("unchecked")
 public abstract class AbstractAuthGuard<U, R extends Enum<R> & IUserRole> {
     
-	protected abstract R parseRole(String roleStr);
+    protected abstract R parseRole(String roleStr);
     protected abstract void getUserEntity(int userId, RoutingContext ctx, Consumer<U> callback);
     protected abstract boolean hasPermission(U user, R role);
-    
-	public Handler<RoutingContext> check(R... allowedRoles) {
+
+    public Handler<RoutingContext> check(R... allowedRoles) {
         return ctx -> {
             String token = extractToken(ctx);
             if (token == null || !JWTManager.getInstance().isValid(token)) {
@@ -59,14 +59,14 @@ public abstract class AbstractAuthGuard<U, R extends Enum<R> & IUserRole> {
         };
     }
 
-    private boolean isRoleAllowed(R role, R... allowedRoles) {
+    protected boolean isRoleAllowed(R role, R... allowedRoles) {
         for (R allowed : allowedRoles) {
             if (role == allowed) return true;
         }
         return false;
     }
 
-    private String extractToken(RoutingContext ctx) {
+    protected String extractToken(RoutingContext ctx) {
         String authHeader = ctx.request().getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             return authHeader.substring(7);
