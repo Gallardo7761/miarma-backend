@@ -4,7 +4,7 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.sqlclient.Pool;
-import net.miarma.api.backlib.util.RouterUtil;
+import net.miarma.api.backlib.Constants.HuertosUserRole;
 import net.miarma.api.microservices.huertos.handlers.BalanceLogicHandler;
 import net.miarma.api.microservices.huertos.handlers.IncomeLogicHandler;
 import net.miarma.api.microservices.huertos.handlers.MailHandler;
@@ -26,34 +26,34 @@ public class HuertosLogicRouter {
 		router.route().handler(BodyHandler.create());
 		
 		router.post(HuertosEndpoints.LOGIN).handler(hMemberLogic::login);
-		router.get(HuertosEndpoints.MEMBER_BY_NUMBER).handler(authGuard.check()).handler(hMemberLogic::getByMemberNumber);
-		router.get(HuertosEndpoints.MEMBER_BY_PLOT).handler(authGuard.check()).handler(hMemberLogic::getByPlotNumber);
-		router.get(HuertosEndpoints.MEMBER_BY_DNI).handler(authGuard.check()).handler(hMemberLogic::getByDni);
-		router.get(HuertosEndpoints.MEMBER_PAYMENTS).handler(authGuard.check()).handler(hMemberLogic::getUserPayments);
-		router.get(HuertosEndpoints.MEMBER_HAS_PAID).handler(authGuard.check()).handler(hMemberLogic::hasPaid);
-		router.get(HuertosEndpoints.MEMBER_WAITLIST).handler(authGuard.check()).handler(hMemberLogic::getWaitlist);
+		router.get(HuertosEndpoints.MEMBER_BY_NUMBER).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberLogic::getByMemberNumber);
+		router.get(HuertosEndpoints.MEMBER_BY_PLOT).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberLogic::getByPlotNumber);
+		router.get(HuertosEndpoints.MEMBER_BY_DNI).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberLogic::getByDni);
+		router.get(HuertosEndpoints.MEMBER_PAYMENTS).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberLogic::getUserPayments);
+		router.get(HuertosEndpoints.MEMBER_HAS_PAID).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberLogic::hasPaid);
+		router.get(HuertosEndpoints.MEMBER_WAITLIST).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberLogic::getWaitlist);
 		router.get(HuertosEndpoints.MEMBER_LIMITED_WAITLIST).handler(hMemberLogic::getLimitedWaitlist);
 		router.get(HuertosEndpoints.LAST_MEMBER_NUMBER).handler(hMemberLogic::getLastMemberNumber);
-		router.get(HuertosEndpoints.BALANCE_WITH_TOTALS).handler(authGuard.check()).handler(hBalanceLogic::getBalanceWithTotals);
-		router.get(HuertosEndpoints.REQUESTS_WITH_PRE_USERS).handler(authGuard.check()).handler(hRequestLogic::getRequestsWithPreUsers);
-		router.get(HuertosEndpoints.REQUEST_WITH_PRE_USER).handler(authGuard.check()).handler(hRequestLogic::getRequestWithPreUser);
+		router.get(HuertosEndpoints.BALANCE_WITH_TOTALS).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hBalanceLogic::getBalanceWithTotals);
+		router.get(HuertosEndpoints.REQUESTS_WITH_PRE_USERS).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hRequestLogic::getRequestsWithPreUsers);
+		router.get(HuertosEndpoints.REQUEST_WITH_PRE_USER).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hRequestLogic::getRequestWithPreUser);
 		router.get(HuertosEndpoints.MEMBER_PROFILE).handler(hMemberLogic::getProfile);
-		router.get(HuertosEndpoints.REQUEST_COUNT).handler(authGuard.check()).handler(hRequestLogic::getRequestCount);
+		router.get(HuertosEndpoints.REQUEST_COUNT).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hRequestLogic::getRequestCount);
 		router.get(HuertosEndpoints.MY_INCOMES).handler(authGuard.check()).handler(hIncomeLogic::getMyIncomes);
 		router.get(HuertosEndpoints.MY_REQUESTS).handler(authGuard.check()).handler(hRequestLogic::getMyRequests);
-		router.put(HuertosEndpoints.ACCEPT_REQUEST).handler(authGuard.check()).handler(hRequestLogic::acceptRequest);
-		router.put(HuertosEndpoints.REJECT_REQUEST).handler(authGuard.check()).handler(hRequestLogic::rejectRequest);
-		router.put(HuertosEndpoints.CHANGE_MEMBER_STATUS).handler(authGuard.check()).handler(hMemberLogic::changeMemberStatus);
-		router.put(HuertosEndpoints.CHANGE_MEMBER_TYPE).handler(authGuard.check()).handler(hMemberLogic::changeMemberType);
+		router.put(HuertosEndpoints.ACCEPT_REQUEST).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hRequestLogic::acceptRequest);
+		router.put(HuertosEndpoints.REJECT_REQUEST).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hRequestLogic::rejectRequest);
+		router.put(HuertosEndpoints.CHANGE_MEMBER_STATUS).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberLogic::changeMemberStatus);
+		router.put(HuertosEndpoints.CHANGE_MEMBER_TYPE).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMemberLogic::changeMemberType);
 		router.get(HuertosEndpoints.MEMBER_HAS_COLLABORATOR).handler(authGuard.check()).handler(hMemberLogic::hasCollaborator);
 		router.get(HuertosEndpoints.MEMBER_HAS_COLLABORATOR_REQUEST).handler(authGuard.check()).handler(hMemberLogic::hasCollaboratorRequest);
 		router.get(HuertosEndpoints.MEMBER_HAS_GREENHOUSE).handler(authGuard.check()).handler(hMemberLogic::hasGreenHouse);
 		router.get(HuertosEndpoints.MEMBER_HAS_GREENHOUSE_REQUEST).handler(authGuard.check()).handler(hMemberLogic::hasGreenHouseRequest);
 		router.post(HuertosEndpoints.PRE_USER_VALIDATE).handler(hMemberLogic::validatePreUser);
 		
-		router.get(HuertosEndpoints.MAILS).handler(hMail::getFolder);
-		router.get(HuertosEndpoints.MAIL).handler(hMail::getMail);
-		router.post(HuertosEndpoints.SEND_MAIL).handler(hMail::sendMail);
+		router.get(HuertosEndpoints.MAILS).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMail::getFolder);
+		router.get(HuertosEndpoints.MAIL).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMail::getMail);
+		router.post(HuertosEndpoints.SEND_MAIL).handler(authGuard.check(HuertosUserRole.ADMIN, HuertosUserRole.DEV)).handler(hMail::sendMail);
 		
 
 	}

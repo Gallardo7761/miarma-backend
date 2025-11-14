@@ -62,7 +62,7 @@
     </dependencies>
 
     <build>
-        <finalName>MiarmaEcosystem</finalName>
+        <finalName>MiarmaBackend</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

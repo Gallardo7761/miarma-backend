@@ -29,7 +29,13 @@ public class CineAuthGuard extends AbstractAuthGuard<ViewerEntity, CineUserRole>
     }
 
     @Override
-    protected boolean hasPermission(ViewerEntity user, CineUserRole role) {
-        return user.getRole() == CineUserRole.ADMIN;
+    protected boolean hasPermission(ViewerEntity member, CineUserRole userRole, CineUserRole... allowedRoles) {
+        if (member == null) return false;
+        if (member.getRole() == CineUserRole.ADMIN) return true;
+        for (CineUserRole role : allowedRoles) {
+            if (member.getRole() == role) return true;
+        }
+        return false;
     }
+
 }
