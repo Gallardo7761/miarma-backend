@@ -29,13 +29,8 @@ public class MMCAuthGuard extends AbstractAuthGuard<PlayerEntity, MMCUserRole> {
     }
 
     @Override
-    protected boolean hasPermission(PlayerEntity member, MMCUserRole userRole, MMCUserRole... allowedRoles) {
-        if (member == null) return false;
-        if (member.getRole() == MMCUserRole.ADMIN) return true;
-        for (MMCUserRole role : allowedRoles) {
-            if (member.getRole() == role) return true;
-        }
-        return false;
+    protected boolean hasPermission(PlayerEntity user, MMCUserRole userRole) {
+    	return user.getRole() == MMCUserRole.ADMIN;
     }
 
 }

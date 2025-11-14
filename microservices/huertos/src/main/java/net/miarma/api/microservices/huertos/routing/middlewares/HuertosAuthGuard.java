@@ -34,14 +34,8 @@ public class HuertosAuthGuard extends AbstractAuthGuard<MemberEntity, HuertosUse
     }
 
     @Override
-    protected boolean hasPermission(MemberEntity member, HuertosUserRole userRole, HuertosUserRole... allowedRoles) {
-        if (member == null) return false;
-        if (member.getRole() == HuertosUserRole.ADMIN || member.getRole() == HuertosUserRole.DEV) return true;
-        for (HuertosUserRole role : allowedRoles) {
-            if (member.getRole() == role) return true;
-        }
-        return false;
-<<<<<<< HEAD
+    protected boolean hasPermission(MemberEntity member, HuertosUserRole userRole) {
+    	return member.getRole() == HuertosUserRole.ADMIN;
     }
 
     @Override
@@ -77,8 +71,6 @@ public class HuertosAuthGuard extends AbstractAuthGuard<MemberEntity, HuertosUse
                 }
             });
         };
-=======
->>>>>>> refs/remotes/origin/dev
     }
 
 }
